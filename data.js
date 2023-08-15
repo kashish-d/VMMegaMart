@@ -109,6 +109,6 @@ export const milks = [
 	},
 ];
 export const data = [
-	{ categoryName: "Atta", categoryData: atta },
-	{ categoryName: "Milks", categoryData: milks },
+	{ categoryName: "Atta", categoryData: atta, img: "flour.png" },
+	{ categoryName: "Milks", categoryData: milks, img: "milk.png" },
 ];

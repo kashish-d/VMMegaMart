@@ -87,7 +87,10 @@ function Menu() {
 											bg="brand.300"
 											borderRadius="50px"
 										>
-											<Image src="images/flour.png" alt="flour-icon" />
+											<Image
+												src={`images/${categoryItem.img}`}
+												alt="flour-icon"
+											/>
 										</Flex>
 
 										<Flex justifyContent="space-between" flex={10}>
