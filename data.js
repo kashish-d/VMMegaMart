@@ -1,4 +1,4 @@
-export const atta = [
+export const dummyAtta = [
 	{
 		itemName: "Rice Atta",
 		itemQuantity: "500gm",
@@ -76,7 +76,7 @@ export const atta = [
 	},
 ];
 
-export const milks = [
+export const dummyMilks = [
 	{
 		itemName: "Amur Taaza",
 		itemQuantity: "12 x 1litre",
@@ -109,6 +109,6 @@ export const milks = [
 	},
 ];
 export const data = [
-	{ categoryName: "Atta", categoryData: atta, img: "flour.png" },
-	{ categoryName: "Milks", categoryData: milks, img: "milk.png" },
+	{ categoryName: "Atta", categoryData: dummyAtta, img: "flour.png" },
+	{ categoryName: "Milks", categoryData: dummyMilks, img: "milk.png" },
 ];
