@@ -1,7 +1,5 @@
 import Menu from "../components/Menu/Menu";
 import HeaderSec from "../components/Header/HeaderSec";
-import { collection, getDocs, query } from "firebase/firestore";
-import { firestore } from "../firebase/clientApp";
 import useMenuDataState from "../hooks/useMenuDataState";
 import Head from "next/head";
 

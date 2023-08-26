@@ -1,12 +1,4 @@
-import {
-	Box,
-	Flex,
-	Skeleton,
-	SkeletonCircle,
-	SkeletonText,
-	Stack,
-} from "@chakra-ui/react";
-import React from "react";
+import { Flex, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 function MenuLoader() {
 	const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

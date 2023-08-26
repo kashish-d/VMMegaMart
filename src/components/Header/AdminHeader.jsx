@@ -29,9 +29,6 @@ function AdminHeader() {
 				<Text fontSize={23} color="brand.200" mb={2} mt={2}>
 					Welcome to Admin Panel
 				</Text>
-				{/* <Text fontSize={23} fontWeight={600}>
-					{"Welcome to Admin Panel"}
-				</Text> */}
 			</Flex>
 		</Flex>
 	);

@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
 import {
 	ChevronLeftIcon,
 	DeleteIcon,
-	Search2Icon,
 	EditIcon,
+	Search2Icon,
 } from "@chakra-ui/icons";
 import {
 	Box,
 	Button,
 	Flex,
+	IconButton,
 	Image,
 	Input,
 	InputGroup,
@@ -17,20 +17,19 @@ import {
 	ListItem,
 	OrderedList,
 	Text,
-	IconButton,
 	useDisclosure,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
-import { deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
-import { firestore } from "../firebase/clientApp";
-import EditModal from "../components/EditModal/EditModal";
+import { deleteDoc, doc } from "firebase/firestore";
 import AddModal from "../components/EditModal/AddModal";
+import EditModal from "../components/EditModal/EditModal";
 import AdminHeader from "../components/Header/AdminHeader";
+import { firestore } from "../firebase/clientApp";
 
-import useMenuDataState from "../hooks/useMenuDataState";
 import Link from "next/link";
 import MenuLoader from "../components/Loader/MenuLoader";
-import { dummyAtta, dummyMilks } from "../../data";
+import useMenuDataState from "../hooks/useMenuDataState";
 
 const initialItem = {
 	itemName: "",
