@@ -14,7 +14,7 @@ export default function Home({}) {
 					content="Check out prices of all the products in our store"
 					key="desc"
 				/>
-				<meta name="theme-color" content="#7785db" />
+				<meta name="theme-color" content="#019cdf" />
 			</Head>
 			<HeaderSec />
 			<Menu data={menuData} loading={menuDataLoading} />
