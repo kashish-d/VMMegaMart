@@ -1,18 +1,11 @@
-import Menu from "../components/Menu/Menu";
-import HeaderSec from "../components/Header/HeaderSec";
-import { firestore } from "../firebase/clientApp";
-import {
-	collection,
-	deleteDoc,
-	doc,
-	getDocs,
-	query,
-	setDoc,
-} from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { menuDataState } from "../atoms/menuDatatAtom";
-import { useState, useEffect } from "react";
+import HeaderSec from "../components/Header/HeaderSec";
+import Menu from "../components/Menu/Menu";
+import { firestore } from "../firebase/clientApp";
 
 export default function Home({}) {
 	const [menuData, setMenuData] = useRecoilState(menuDataState);

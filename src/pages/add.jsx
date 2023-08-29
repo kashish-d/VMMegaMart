@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronLeftIcon, DeleteIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import {
 	Box,
 	Button,
@@ -15,22 +15,22 @@ import {
 	Stack,
 	Text,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { firestore } from "../firebase/clientApp";
 import {
+	arrayUnion,
+	collection,
 	doc,
 	getDoc,
-	setDoc,
-	arrayUnion,
-	updateDoc,
-	query,
-	collection,
 	getDocs,
+	query,
+	setDoc,
+	updateDoc,
 } from "firebase/firestore";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { menuDataState } from "../atoms/menuDatatAtom";
 import { authState } from "../atoms/authAtom";
+import { menuDataState } from "../atoms/menuDatatAtom";
+import { firestore } from "../firebase/clientApp";
 
 const initialItemDetails = {
 	categoryName: "",

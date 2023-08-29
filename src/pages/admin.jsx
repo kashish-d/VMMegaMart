@@ -13,7 +13,7 @@ import {
 	Text,
 	useToast,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	collection,
@@ -26,16 +26,15 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { dummyAtta, dummyData } from "../../data";
+import { dummyData } from "../../data";
 import SearchResults from "../Search/SearchResults";
+import { authState } from "../atoms/authAtom";
 import { menuDataState } from "../atoms/menuDatatAtom";
 import EditListItem from "../components/CategoryItems/EditListItem";
 import AdminHeader from "../components/Header/AdminHeader";
 import MenuLoader from "../components/Loader/MenuLoader";
-import authContext from "../contexts/authContext";
 import { firestore } from "../firebase/clientApp";
 import useDebounce from "../hooks/useDebounce";
-import { authState } from "../atoms/authAtom";
 
 function Admin() {
 	const { userLoading, userStatus } = useRecoilValue(authState);
@@ -231,7 +230,7 @@ function Admin() {
 					</Flex>
 				</Flex>
 			)}
-			<Button
+			{/* <Button
 				onClick={() => {
 					try {
 						dummyData.forEach(async (each) => {
@@ -249,7 +248,7 @@ function Admin() {
 				}}
 			>
 				Add it
-			</Button>
+			</Button> */}
 		</>
 	);
 }
