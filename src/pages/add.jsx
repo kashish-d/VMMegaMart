@@ -1,33 +1,36 @@
-import React, { useEffect, useState } from "react";
-
+import { ChevronDownIcon, ChevronLeftIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
+	Box,
 	Button,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	Input,
 	Flex,
-	Text,
-	Select,
-	Stack,
-} from "@chakra-ui/react";
-import {
+	Heading,
+	Image,
+	Input,
 	Menu,
 	MenuButton,
-	MenuList,
-	MenuItem,
-	MenuItemOption,
 	MenuGroup,
-	MenuOptionGroup,
-	MenuDivider,
+	MenuItem,
+	MenuList,
+	Spinner,
+	Stack,
+	Text,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { firestore } from "../../firebase/clientApp";
-import { doc, getDoc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { firestore } from "../firebase/clientApp";
+import {
+	doc,
+	getDoc,
+	setDoc,
+	arrayUnion,
+	updateDoc,
+	query,
+	collection,
+	getDocs,
+} from "firebase/firestore";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { menuDataState } from "../atoms/menuDatatAtom";
+import { authState } from "../atoms/authAtom";
 
 const initialItemDetails = {
 	categoryName: "",
@@ -37,13 +40,16 @@ const initialItemDetails = {
 	itemPrice: "",
 };
 
-function AddModal({ isOpen, onClose, data, setMenuData }) {
+function Add() {
+	const { userStatus, userLoading } = useRecoilValue(authState);
+	const [menuData, setMenuData] = useRecoilState(menuDataState);
 	const [itemDetails, setItemDetails] = useState(initialItemDetails); //To manage changes in the input fields
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [addStatus, setAddStatus] = useState(false);
 	const [categories, setCategories] = useState([]);
 	const [newCategoryAdd, setNewCategoryAdd] = useState(false);
+	const [menuDataLoading, setMenuDataLoading] = useState(false);
 
 	const handleChange = (e) => {
 		setItemDetails({
@@ -69,7 +75,7 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 				itemDescription: itemDescription,
 				itemPrice: itemPrice,
 				itemQuantity: itemQuantity,
-				categoryName: categoryName,
+				category: categoryName,
 			};
 			let updatedCategory;
 
@@ -83,7 +89,7 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 				await updateDoc(menuDataDocRef, {
 					categoryName: categoryName,
 					categoryData: arrayUnion(item),
-					img: "flour.png",
+					img: updatedCategory.img,
 				});
 			} else {
 				updatedCategory = {
@@ -94,9 +100,9 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 				await setDoc(menuDataDocRef, updatedCategory);
 			}
 
-			const updatedData = data;
+			const updatedData = JSON.parse(JSON.stringify(menuData)); //Deep copy;
 
-			//because the indexing will remain identical, I used categories.
+			//because the indexing will remain identical
 			let cIndex = categories.findIndex((cName) => cName === categoryName);
 			if (cIndex < 0) {
 				cIndex = categories.length;
@@ -109,6 +115,7 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 			setMenuData([...updatedData]);
 		} catch (err) {
 			console.log("AddItemError", err);
+			setError(true);
 		}
 	};
 
@@ -140,26 +147,50 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 		}
 	};
 
+	const fetchMenuData = async () => {
+		setMenuDataLoading(true);
+		setError(false);
+		try {
+			const dataQuery = query(collection(firestore, "menuData"));
+			const dataDocs = await getDocs(dataQuery);
+			const data = dataDocs.docs.map((doc) => ({ ...doc.data() }));
+			setMenuData([...data]);
+		} catch (err) {
+			console.log("fetchMenuDataError", err);
+			setError(true);
+		}
+		setMenuDataLoading(false);
+	};
+
 	useEffect(() => {
-		const arr = data.map((each) => each.categoryName);
+		if (menuData.length < 1) {
+			console.log("I am running here at add page");
+			fetchMenuData();
+		} else {
+			setMenuDataLoading(false);
+		}
+		const arr = menuData.map((each) => each.categoryName);
 		setCategories([...arr]);
-	}, [data]);
+	}, [menuData]);
 
 	return (
 		<>
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-				closeOnOverlayClick={false}
-				size="xs"
-				scrollBehavior="inside"
-				trapFocus={false}
-			>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader>Add Item</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
+			{userStatus ? (
+				<>
+					<Flex pt={3}>
+						<Link href="/admin">
+							<ChevronLeftIcon />
+							<Button variant="link">Back to dashboard</Button>
+						</Link>
+					</Flex>
+					<Stack m={4} mx={7}>
+						<Box>
+							<Flex align="center" justify="center" my={5}></Flex>
+							<Flex align="center" justify="space-between" my={3}>
+								<Heading fontSize={23}>Add Item</Heading>
+							</Flex>
+						</Box>
+
 						<Flex flexDirection="column" gap={5}>
 							<Flex fontSize={14} flexDirection="column">
 								<Text m={1} color="brand.200">
@@ -198,6 +229,8 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 															{each}
 														</MenuItem>
 													))
+												) : menuDataLoading ? (
+													<Spinner />
 												) : (
 													<Flex justify="center" align="center">
 														{"No Categories added"}
@@ -286,24 +319,45 @@ function AddModal({ isOpen, onClose, data, setMenuData }) {
 								/>
 							</Flex>
 						</Flex>
-					</ModalBody>
-
-					<ModalFooter>
-						<Button mr={3} variant="outline" onClick={onClose}>
-							Cancel
-						</Button>
-						<Button
-							colorScheme={addStatus ? "green" : "red"}
-							onClick={saveItem}
-							isLoading={loading}
-						>
-							{addStatus ? "Added 😄" : "Add Item"}
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
+						<Flex align="center" py={4} justify="flex-end" gap={3} mt={2}>
+							<Button variant="outline" onClick={() => router.back()}>
+								Cancel
+							</Button>
+							<Button
+								colorScheme={addStatus ? "green" : "red"}
+								onClick={saveItem}
+								isLoading={loading}
+							>
+								{addStatus ? "Added 😄" : "Add Item"}
+							</Button>
+						</Flex>
+					</Stack>
+				</>
+			) : (
+				<Flex
+					justify="center"
+					align="center"
+					flexDirection="column"
+					m={10}
+					gap={5}
+				>
+					<Image src="images/notAllowed.png" alt="" height="50vmin" />
+					<Flex justify="center" align="center" direction="column">
+						<Text color="red" fontWeight={600} fontSize={15} align="center">
+							{userLoading ? "Loading..." : "Only for admins, Login required!"}
+						</Text>
+						{userLoading ? (
+							<Spinner />
+						) : (
+							<Link href="/">
+								<Button m={3}>Go Home</Button>
+							</Link>
+						)}
+					</Flex>
+				</Flex>
+			)}
 		</>
 	);
 }
 
-export default AddModal;
+export default Add;

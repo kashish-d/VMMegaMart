@@ -13,11 +13,14 @@ import Link from "next/link";
 import { useContext } from "react";
 import { FaUserCheck, FaUserGear } from "react-icons/fa6";
 import { MdDarkMode } from "react-icons/md";
+import { HiShoppingCart } from "react-icons/hi";
 import authContext from "../../contexts/authContext";
 import LoginModal from "../Login/LoginModal";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../atoms/authAtom";
 
 function Navbar() {
-	const { userStatus, userLoading } = useContext(authContext);
+	const { userLoading, userStatus } = useRecoilValue(authState);
 	const {
 		isOpen: isLoginOpen,
 		onOpen: onLoginOpen,
@@ -39,14 +42,13 @@ function Navbar() {
 			borderRadius="0px 0px 6px 6px"
 		>
 			<Flex fontSize={23} color="white" ml={1} mr={1}>
-				<MdDarkMode />
+				<HiShoppingCart />
 			</Flex>
 			<Link href={"/"}>
 				<Text fontWeight="800" fontSize={20} color="white">
 					VM MEGA MART
 				</Text>
 			</Link>
-			{userLoading && <SkeletonCircle size={23} />}
 			{!userLoading && userStatus ? (
 				<Link href="/admin">
 					<IconButton

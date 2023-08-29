@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import authContext from "../../contexts/authContext";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { authState } from "../../atoms/authAtom";
 
 const initialUserDetails = {
 	username: "",
@@ -23,11 +25,10 @@ const initialUserDetails = {
 
 function LoginModal({ isOpen, onClose }) {
 	const [userDetails, setUserDetails] = useState(initialUserDetails);
-	const { login, userStatus, userLoading, userError } = useContext(authContext);
+	const [authData, setAuthData] = useRecoilState(authState);
 	const [error, setError] = useState(false);
 	const router = useRouter();
 
-	// console.log(userDetails);
 	const handleChange = (e) => {
 		setUserDetails((prev) => ({
 			...prev,
@@ -38,10 +39,42 @@ function LoginModal({ isOpen, onClose }) {
 		}
 	};
 
+	const login = ({ username, password }, writeToLocal) => {
+		setAuthData({
+			...authData,
+			userLoading: true,
+		});
+		if (
+			process.env.NEXT_PUBLIC_APP_ADMIN_USERNAME === username &&
+			process.env.NEXT_PUBLIC_APP_ADMIN_PASSWORD === password
+		) {
+			setAuthData({
+				userStatus: true,
+				userLoading: false,
+			});
+			if (writeToLocal) {
+				let user = {
+					username: username,
+					password: password,
+				};
+				console.log(JSON.stringify(user));
+				localStorage.setItem("user", JSON.stringify(user));
+			}
+			return true;
+		} else {
+			setError("Username or password is wrong!");
+			setAuthData({
+				...authData,
+				userLoading: false,
+			});
+			return false;
+		}
+	};
+
 	const handleLogin = () => {
-		setError(false);
+		setError("");
 		if (userDetails.username == "" || userDetails.password == "") {
-			setError(true);
+			setError("Username and Password cannot be empty");
 			return;
 		}
 		//userStatus does not update fast enough for a if statement
@@ -50,6 +83,16 @@ function LoginModal({ isOpen, onClose }) {
 			router.push("/admin");
 		}
 	};
+
+	useEffect(() => {
+		const isUserLoggedIn = () => {
+			const user = JSON.parse(localStorage.getItem("user"));
+			if (user) {
+				login(user, false);
+			}
+		};
+		isUserLoggedIn();
+	}, []);
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} size={"xs"}>
@@ -99,12 +142,7 @@ function LoginModal({ isOpen, onClose }) {
 					</Flex>
 					{error && (
 						<Text fontSize={12} mt={4} color="red.400">
-							Username and Password cannot be empty
-						</Text>
-					)}
-					{userError && !error && (
-						<Text fontSize={12} mt={4} color="red.400">
-							Username or password is wrong!
+							{error}
 						</Text>
 					)}
 				</ModalBody>
@@ -114,7 +152,7 @@ function LoginModal({ isOpen, onClose }) {
 						Close
 					</Button>
 					<Button
-						isLoading={userLoading}
+						// isLoading={userLoading}
 						variant="solid"
 						colorScheme="green"
 						onClick={handleLogin}

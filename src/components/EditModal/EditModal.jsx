@@ -28,21 +28,25 @@ import { ChevronDownIcon, DeleteIcon } from "@chakra-ui/icons";
 import { firestore } from "../../firebase/clientApp";
 import { doc, getDoc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
 
+const initialItem = {
+	itemName: "",
+	itemDescription: "",
+	itemPrice: "",
+	itemQuantity: "",
+	categoryName: "",
+	itemIndex: 0,
+	categoryIndex: 0,
+};
+
 function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
-	const [itemDetails, setItemDetails] = useState({}); //To manage changes in the input fields
+	const [itemDetails, setItemDetails] = useState({ initialItem }); //To manage changes in the input fields
 	const [isChanged, setIsChanged] = useState(false);
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [deleteLoading, setDeleteLoading] = useState(false);
 	const [editStatus, setEditStatus] = useState(false);
 	const [deleteStatus, setDeleteStatus] = useState(false);
-	const categories = data.map((each) => each.categoryName);
 	const toast = useToast();
-	const {
-		isOpen: isAlertVisible,
-		onClose: onAlertClose,
-		onOpen: onAlertOpen,
-	} = useDisclosure({ defaultIsOpen: false });
 
 	const handleChange = (e) => {
 		setItemDetails({
@@ -58,6 +62,7 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 		itemName,
 		itemPrice,
 		itemQuantity,
+		itemDescription,
 		categoryName,
 		itemIndex,
 		categoryIndex,
@@ -67,6 +72,7 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 			const updatedItem = {
 				categoryName,
 				itemName,
+				itemDescription,
 				itemQuantity,
 				itemPrice,
 			};
@@ -77,7 +83,7 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 			await setDoc(menuDataDocRef, {
 				categoryName: categoryName,
 				categoryData: updatedCategoryData,
-				img: "flour.png",
+				img: updatedCategory.img,
 			});
 			const updatedData = data;
 			updatedData[categoryIndex] = updatedCategory; // is this redudant?
@@ -91,6 +97,7 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 		itemName,
 		itemPrice,
 		itemQuantity,
+		itemDescription,
 		categoryName,
 		itemIndex,
 		categoryIndex,
@@ -110,7 +117,7 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 			await setDoc(menuDataDocRef, {
 				categoryName: categoryName,
 				categoryData: updatedCategory.categoryData,
-				img: "flour.png",
+				img: updatedCategory.img,
 			});
 
 			const updatedData = data;
@@ -160,6 +167,8 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 					onClose();
 					setIsChanged(false);
 				}}
+				// motionPreset="none"
+				trapFocus={false}
 				closeOnOverlayClick={false}
 				size="xs"
 			>
@@ -168,7 +177,12 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 					<ModalHeader>Edit Item</ModalHeader>
 					<ModalCloseButton />
 					<Flex align="center" justify="flex-end" pr={6} pl={6} pb={2}>
-						<Button width="100%" colorScheme="red" onClick={handleDeleteItem}>
+						<Button
+							width="100%"
+							colorScheme="red"
+							onClick={handleDeleteItem}
+							isLoading={deleteLoading}
+						>
 							Delete Item
 							<DeleteIcon ml={2} />
 						</Button>
@@ -184,6 +198,18 @@ function EditModal({ isOpen, onClose, categoryItem, data, setMenuData }) {
 									focusBorderColor="brand.100"
 									value={itemDetails.itemName}
 									name="itemName"
+									onChange={handleChange}
+								/>
+							</Flex>
+							<Flex fontSize={12} flexDirection="column">
+								<Text m={1} color="brand.200">
+									Item Description
+								</Text>
+								<Input
+									variant="filled"
+									focusBorderColor="brand.100"
+									value={itemDetails.itemDescription}
+									name="itemDescription"
 									onChange={handleChange}
 								/>
 							</Flex>

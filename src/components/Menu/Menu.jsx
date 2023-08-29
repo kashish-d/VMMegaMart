@@ -16,8 +16,20 @@ import {
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import MenuLoader from "../Loader/MenuLoader";
+import { useEffect, useState } from "react";
+import EditListItem from "../CategoryItems/EditListItem";
+import useDebounce from "../../hooks/useDebounce";
+import SearchResults from "../../Search/SearchResults";
 
 function Menu({ data, loading }) {
+	const [searchTerm, setSearchTerm] = useState("");
+	const debouncedValue = useDebounce(searchTerm);
+
+	const handleSearch = (e) => {
+		const string = e.target.value.toLowerCase();
+		setSearchTerm(string);
+	};
+
 	return (
 		<>
 			<Flex
@@ -37,8 +49,11 @@ function Menu({ data, loading }) {
 				justifyContent="center"
 				alignItems="center"
 				mb={2}
-				// position="sticky"
-				// top="10px"
+				// bg="rgba(0,0,0,0.5)"
+				backdropFilter="blur(50px)"
+				position="sticky"
+				top="0px"
+				// border="1px solid"
 			>
 				<InputGroup width="90%">
 					<InputRightElement mx={1} pointerEvents="none">
@@ -48,14 +63,17 @@ function Menu({ data, loading }) {
 						variant="filled"
 						placeholder="Search for products"
 						focusBorderColor="brand.100"
+						onChange={handleSearch}
 					/>
 				</InputGroup>
 			</Flex>
-			{loading ? (
+			{searchTerm ? (
+				<SearchResults searchTerm={debouncedValue} edit={false} />
+			) : loading ? (
 				<MenuLoader />
 			) : (
 				<Accordion
-					defaultIndex={[0, 1, 2, 3, 4, 5]}
+					defaultIndex={data.map((each, index) => index)}
 					allowMultiple
 					border="0px transparent"
 				>
@@ -87,46 +105,50 @@ function Menu({ data, loading }) {
 								>
 									<List spacing={3}>
 										{categoryItem.categoryData?.length > 0 ? (
-											categoryItem.categoryData.map((item) => (
-												<ListItem
-													key={item.itemName}
-													display="flex"
-													justifyContent="space-between"
-													alignItems="center"
-													gap={3}
-													py={1}
-												>
-													<Flex
-														justify="center"
-														align="center"
-														flex={1}
-														height="100%"
-														p={2}
-														bg="brand.300"
-														borderRadius="50px"
-													>
-														<Image
-															src={`images/${categoryItem.img}`}
-															alt="flour-icon"
-														/>
-													</Flex>
+											categoryItem.categoryData.map((item, index) => (
+												// <ListItem
+												// 	key={`${item.itemName}_${item.itemPrice}`}
+												// 	display="flex"
+												// 	justifyContent="space-between"
+												// 	alignItems="center"
+												// 	gap={3}
+												// 	py={1}
+												// >
+												// 	<Flex
+												// 		justify="center"
+												// 		align="center"
+												// 		flex={1}
+												// 		height="100%"
+												// 		p={2}
+												// 		bg="brand.300"
+												// 		borderRadius="50px"
+												// 	>
+												// 		<Image src={`images/${categoryItem.img}`} alt="" />
+												// 	</Flex>
 
-													<Flex justifyContent="space-between" flex={10}>
-														<Flex flexDirection={"column"} gap={1}>
-															<Text fontSize={16} fontWeight={500}>
-																{item.itemName}
-															</Text>
-															<Text
-																fontSize={12}
-																fontWeight={400}
-																color="gray.500"
-															>
-																{item.itemQuantity}
-															</Text>
-														</Flex>
-														<Text>${item.itemPrice}</Text>
-													</Flex>
-												</ListItem>
+												// 	<Flex justifyContent="space-between" flex={10}>
+												// 		<Flex flexDirection={"column"} gap={1}>
+												// 			<Text fontSize={16} fontWeight={500}>
+												// 				{item.itemName}
+												// 			</Text>
+												// 			<Text
+												// 				fontSize={12}
+												// 				fontWeight={400}
+												// 				color="gray.500"
+												// 			>
+												// 				{item.itemQuantity}
+												// 			</Text>
+												// 		</Flex>
+												// 		<Text>${item.itemPrice}</Text>
+												// 	</Flex>
+												// </ListItem>
+												<EditListItem
+													item={item}
+													index={index}
+													key={`${item.itemName}_${index}`}
+													categoryItem={categoryItem}
+													edit={false}
+												/>
 											))
 										) : (
 											<Flex justify={"center"} align={"center"} p={5}>
