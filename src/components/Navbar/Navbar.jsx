@@ -35,9 +35,7 @@ function Navbar() {
 			bg="brand.100"
 			padding="12px"
 			align="center"
-			// justify="center"
 			justify="space-between"
-			// boxShadow="0px 0px 10px"
 			boxShadow="0 0 13px -6px"
 			borderRadius="0px 0px 6px 6px"
 		>
@@ -64,7 +62,7 @@ function Navbar() {
 					<Menu>
 						<MenuButton
 							colorScheme="transparent"
-							color="white"
+							// color="white"
 							as={IconButton}
 							aria-label="Options"
 							icon={<FaUserGear />}

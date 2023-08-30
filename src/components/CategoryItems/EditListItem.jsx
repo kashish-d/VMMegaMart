@@ -66,6 +66,7 @@ function EditListItem({ item, index, categoryItem, edit = true }) {
 					borderRadius="50px"
 				>
 					<Image
+						transform="scale(1.2)"
 						src={
 							categoryItem?.img
 								? `images/${categoryItem.img}`

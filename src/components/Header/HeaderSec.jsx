@@ -4,17 +4,14 @@ import React from "react";
 function HeaderSec() {
 	return (
 		<Flex
-			// height="55vmin"
 			bgSize="cover"
 			width="100%"
 			justifyContent="space-between"
-			// justifyContent="flex-end"
 			alignItems={"flex-start"}
 			flexDirection="row-reverse"
-			// flexDirection="column"
 			p={4}
-			// pr={0}
-			mt={10}
+			// mt={10}
+			mt={20}
 		>
 			<Image
 				src="images/header5.png"

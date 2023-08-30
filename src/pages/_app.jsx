@@ -1,11 +1,9 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import Layout from "../components/Layout/Layout";
-import { theme } from "../chakra/theme";
-import authContext from "../contexts/authContext";
-import { useEffect, useState } from "react";
 import NextNProgress from "nextjs-progressbar";
-import { RecoilRoot, useRecoilState } from "recoil";
-import { authState } from "../atoms/authAtom";
+import { RecoilRoot } from "recoil";
+import { theme } from "../chakra/theme";
+import Layout from "../components/Layout/Layout";
+import "../app.css";
 
 function MyApp({ Component, pageProps }) {
 	return (

@@ -6,6 +6,7 @@ import { menuDataState } from "../atoms/menuDatatAtom";
 import HeaderSec from "../components/Header/HeaderSec";
 import Menu from "../components/Menu/Menu";
 import { firestore } from "../firebase/clientApp";
+import CategoryBar from "../components/CategoryItems/CategoryBar";
 
 export default function Home({}) {
 	const [menuData, setMenuData] = useRecoilState(menuDataState);
@@ -48,6 +49,7 @@ export default function Home({}) {
 				<meta name="theme-color" content="#019cdf" />
 			</Head>
 			<HeaderSec />
+			{/* <CategoryBar /> */}
 			<Menu data={menuData} loading={menuDataLoading} />
 		</>
 	);

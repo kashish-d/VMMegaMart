@@ -44,6 +44,17 @@ function Menu({ data, loading }) {
 					Our products
 				</Text>
 			</Flex>
+			{/* <Flex
+				justifyContent="flex-start"
+				alignItems="center"
+				px={4}
+				mt={12}
+				blur="1px"
+			>
+				<Text fontSize={16} fontWeight={600} color="brand.200">
+					Our Products
+				</Text>
+			</Flex> */}
 			<Flex
 				p={3}
 				justifyContent="center"
@@ -53,6 +64,7 @@ function Menu({ data, loading }) {
 				backdropFilter="blur(50px)"
 				position="sticky"
 				top="0px"
+				zIndex="90"
 				// border="1px solid"
 			>
 				<InputGroup width="90%">
@@ -92,6 +104,7 @@ function Menu({ data, loading }) {
 											textAlign="left"
 											fontSize={16}
 											fontWeight={600}
+											id={categoryItem.categoryName}
 										>
 											{categoryItem.categoryName}
 										</Box>
