@@ -62,7 +62,7 @@ function Navbar() {
 					<Menu>
 						<MenuButton
 							colorScheme="transparent"
-							// color="white"
+							color="white"
 							as={IconButton}
 							aria-label="Options"
 							icon={<FaUserGear />}

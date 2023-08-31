@@ -49,7 +49,7 @@ export default function Home({}) {
 				<meta name="theme-color" content="#019cdf" />
 			</Head>
 			<HeaderSec />
-			{/* <CategoryBar /> */}
+			<CategoryBar />
 			<Menu data={menuData} loading={menuDataLoading} />
 		</>
 	);

@@ -32,7 +32,7 @@ function Menu({ data, loading }) {
 
 	return (
 		<>
-			<Flex
+			{/* <Flex
 				justifyContent="center"
 				alignItems="center"
 				py={5}
@@ -43,29 +43,27 @@ function Menu({ data, loading }) {
 				<Text fontSize={16} fontWeight={600} color="brand.200">
 					Our products
 				</Text>
-			</Flex>
-			{/* <Flex
+			</Flex> */}
+			<Flex
 				justifyContent="flex-start"
 				alignItems="center"
 				px={4}
-				mt={12}
+				mt={9}
 				blur="1px"
 			>
 				<Text fontSize={16} fontWeight={600} color="brand.200">
 					Our Products
 				</Text>
-			</Flex> */}
+			</Flex>
 			<Flex
 				p={3}
 				justifyContent="center"
 				alignItems="center"
 				mb={2}
-				// bg="rgba(0,0,0,0.5)"
 				backdropFilter="blur(50px)"
-				position="sticky"
-				top="0px"
+				// position="sticky"
+				// top="0px"
 				zIndex="90"
-				// border="1px solid"
 			>
 				<InputGroup width="90%">
 					<InputRightElement mx={1} pointerEvents="none">
